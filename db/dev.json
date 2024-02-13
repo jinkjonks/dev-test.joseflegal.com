@@ -2,7 +2,7 @@
   "user": {
     "id": 12345678,
     "name": "Bilbo Baggins",
-    "loaction": "Middle Earth"
+    "location": "Middle Earth"
   },
   "entities": [
     {

@@ -93,8 +93,9 @@ img {
 </style>
 <script>
 // @ is an alias to /src
-import api from "@/api";
 import pino from "pino";
+import { computed } from "vue";
+import { mapGetters } from "vuex";
 
 const OPERATIONS = {
   IS: "is",
@@ -111,10 +112,13 @@ export default {
   name: "Rules",
   data() {
     return {
-      rule_groups: false,
-      answers: false,
-      rules: false,
+      rule_groups: computed(() => this.$store.getters["data/rule_groups"]),
+      rules: computed(() => this.$store.getters["data/rules"]),
+      answers: computed(() => this.$store.getters["data/answers"]),
     };
+  },
+  computed: {
+    ...mapGetters("rules", ["rule_groups", "rules", "answers"]),
   },
   methods: {
     checkGroup(rule_group) {
@@ -171,17 +175,9 @@ export default {
     },
   },
   created() {
-    // loading data from the API
-
-    api.answers.get().then((res) => {
-      this.answers = res;
-    });
-    api.rules.get().then((res) => {
-      this.rules = res;
-    });
-    api.rule_groups.get().then((res) => {
-      this.rule_groups = res;
-    });
+    if (!this.rule_groups || !this.rules || !this.answers) {
+      this.$store.dispatch("rules/get");
+    }
   },
 };
 </script>
